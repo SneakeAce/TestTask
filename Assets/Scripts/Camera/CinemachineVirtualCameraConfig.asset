@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c04e2952cf4ab549bc96cf2e0d77076, type: 3}
   m_Name: CinemachineVirtualCameraConfig
   m_EditorClassIdentifier: 
-  <SensitivityCamera>k__BackingField: 0.25
+  <SensitivityCamera>k__BackingField: 0.5

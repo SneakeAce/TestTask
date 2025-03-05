@@ -29,6 +29,8 @@ public class MovementComponent
         Vector2 movementInput = _playerInput.PlayerMoving.Move.ReadValue<Vector2>();
 
         Vector3 directionMove = new Vector3(movementInput.x, 0f, movementInput.y);
+        directionMove = _player.transform.TransformDirection(directionMove.normalized);
+        directionMove.y = 0;
 
         _player.Rigidbody.velocity = new Vector3(directionMove.x * _speed, 0f, directionMove.z * _speed);
     }

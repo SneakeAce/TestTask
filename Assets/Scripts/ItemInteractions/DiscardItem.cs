@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class DiscardItem 
 {
+    private const float ThrowForce = 20f;
+
     private GameObject _currentItem;
 
     public void GetItem(GameObject item)
@@ -17,9 +19,14 @@ public class DiscardItem
 
         Debug.Log("DiscardItem / DropItem");
         Rigidbody rbItem = _currentItem.GetComponent<Rigidbody>();
+        MeshCollider colliderItem = _currentItem.GetComponent<MeshCollider>();
 
         rbItem.isKinematic = false;
-        rbItem.AddForce(rbItem.transform.forward, ForceMode.Impulse);
+        colliderItem.enabled = true;
+
+        _currentItem.transform.SetParent(null);
+
+        rbItem.AddForce(rbItem.transform.forward * ThrowForce, ForceMode.Impulse);
 
         _currentItem = null;
     }

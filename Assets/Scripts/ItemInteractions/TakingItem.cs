@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class TakingItem : IDisposable, IInitializable
 {
-    private const float MaxRangeRaycast = 10f;
+    private const float MaxRangeRaycast = 2f;
 
     // Сделать здесь поле с кнопкой интерфейса
     private Camera _camera;
@@ -77,8 +77,6 @@ public class TakingItem : IDisposable, IInitializable
             }
 
         }
-            
-
     }
 
     private void PickUpItem(GameObject item)
@@ -94,6 +92,7 @@ public class TakingItem : IDisposable, IInitializable
         _currentItem.transform.localPosition = Vector3.zero;
         _currentItem.transform.localRotation = Quaternion.identity;
         _currentItem.GetComponent<Rigidbody>().isKinematic = true;
+        _currentItem.GetComponent<MeshCollider>().enabled = false;
     }
 
 }

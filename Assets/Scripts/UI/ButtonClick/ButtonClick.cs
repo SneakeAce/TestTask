@@ -33,8 +33,9 @@ public class ButtonClick : MonoBehaviour
         DisableButton();
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
+        Debug.Log("OnDestroy in ButtonClick");
         _button.gameObject.SetActive(false);
         _takingItem.EnableButton -= OnEnableButton;
     }
@@ -46,6 +47,7 @@ public class ButtonClick : MonoBehaviour
 
     private void OnEnableButton()
     {
+        Debug.Log("OnEnableButton");
         _button.gameObject.SetActive(true);
         _playerInput.TakingItem.PickItem.Disable();
     }
