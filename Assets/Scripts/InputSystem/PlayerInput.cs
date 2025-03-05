@@ -52,6 +52,34 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             ]
         },
         {
+            ""name"": ""PlayerLooking"",
+            ""id"": ""e58eda2f-6154-41ad-b980-9d9fa93c3c0a"",
+            ""actions"": [
+                {
+                    ""name"": ""LookAround"",
+                    ""type"": ""Value"",
+                    ""id"": ""3b574b0b-6778-4b2e-9940-10a490552a10"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""209aca2e-c7f6-4419-b225-cffdd80585e4"",
+                    ""path"": ""<Touchscreen>/delta"",
+                    ""interactions"": ""Hold(duration=0.2,pressPoint=0.2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LookAround"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""TakingItem"",
             ""id"": ""1277ca4b-82ce-4878-9666-eb4b26ebc654"",
             ""actions"": [
@@ -76,17 +104,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""PickItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8cc900b3-f519-4da4-a4d7-6edc8f475f88"",
-                    ""path"": ""<Mouse>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""PickItem"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -96,6 +113,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         // PlayerMoving
         m_PlayerMoving = asset.FindActionMap("PlayerMoving", throwIfNotFound: true);
         m_PlayerMoving_Move = m_PlayerMoving.FindAction("Move", throwIfNotFound: true);
+        // PlayerLooking
+        m_PlayerLooking = asset.FindActionMap("PlayerLooking", throwIfNotFound: true);
+        m_PlayerLooking_LookAround = m_PlayerLooking.FindAction("LookAround", throwIfNotFound: true);
         // TakingItem
         m_TakingItem = asset.FindActionMap("TakingItem", throwIfNotFound: true);
         m_TakingItem_PickItem = m_TakingItem.FindAction("PickItem", throwIfNotFound: true);
@@ -203,6 +223,52 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     }
     public PlayerMovingActions @PlayerMoving => new PlayerMovingActions(this);
 
+    // PlayerLooking
+    private readonly InputActionMap m_PlayerLooking;
+    private List<IPlayerLookingActions> m_PlayerLookingActionsCallbackInterfaces = new List<IPlayerLookingActions>();
+    private readonly InputAction m_PlayerLooking_LookAround;
+    public struct PlayerLookingActions
+    {
+        private @PlayerInput m_Wrapper;
+        public PlayerLookingActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @LookAround => m_Wrapper.m_PlayerLooking_LookAround;
+        public InputActionMap Get() { return m_Wrapper.m_PlayerLooking; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PlayerLookingActions set) { return set.Get(); }
+        public void AddCallbacks(IPlayerLookingActions instance)
+        {
+            if (instance == null || m_Wrapper.m_PlayerLookingActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_PlayerLookingActionsCallbackInterfaces.Add(instance);
+            @LookAround.started += instance.OnLookAround;
+            @LookAround.performed += instance.OnLookAround;
+            @LookAround.canceled += instance.OnLookAround;
+        }
+
+        private void UnregisterCallbacks(IPlayerLookingActions instance)
+        {
+            @LookAround.started -= instance.OnLookAround;
+            @LookAround.performed -= instance.OnLookAround;
+            @LookAround.canceled -= instance.OnLookAround;
+        }
+
+        public void RemoveCallbacks(IPlayerLookingActions instance)
+        {
+            if (m_Wrapper.m_PlayerLookingActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IPlayerLookingActions instance)
+        {
+            foreach (var item in m_Wrapper.m_PlayerLookingActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_PlayerLookingActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public PlayerLookingActions @PlayerLooking => new PlayerLookingActions(this);
+
     // TakingItem
     private readonly InputActionMap m_TakingItem;
     private List<ITakingItemActions> m_TakingItemActionsCallbackInterfaces = new List<ITakingItemActions>();
@@ -251,6 +317,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     public interface IPlayerMovingActions
     {
         void OnMove(InputAction.CallbackContext context);
+    }
+    public interface IPlayerLookingActions
+    {
+        void OnLookAround(InputAction.CallbackContext context);
     }
     public interface ITakingItemActions
     {

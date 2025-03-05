@@ -13,8 +13,6 @@ public class PlayerInstaller : MonoInstaller
 
         CreateAndBindPlayer();
 
-        BindTakingItemClass();
-
         Debug.Log("All Binds Done");
     }
 
@@ -34,10 +32,5 @@ public class PlayerInstaller : MonoInstaller
             _playerStatsConfig.SpawnCoordinate, Quaternion.identity, null);
 
         Container.BindInterfacesAndSelfTo<PlayerController>().FromInstance(player).AsSingle().NonLazy();
-    }
-
-    private void BindTakingItemClass()
-    {
-        Container.BindInterfacesAndSelfTo<TakingItem>().AsSingle().NonLazy();
     }
 }

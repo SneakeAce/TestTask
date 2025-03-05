@@ -26,8 +26,6 @@ public class MovementComponent
 
     private void Move()
     {
-        Debug.Log("MovementComponent / Move");
-
         Vector2 movementInput = _playerInput.PlayerMoving.Move.ReadValue<Vector2>();
 
         Vector3 directionMove = new Vector3(movementInput.x, 0f, movementInput.y);
