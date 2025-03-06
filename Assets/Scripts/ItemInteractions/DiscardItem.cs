@@ -2,13 +2,18 @@ using UnityEngine;
 
 public class DiscardItem 
 {
-    private const float ThrowForce = 20f;
-
     private GameObject _currentItem;
+
+    private const float ThrowForce = 40f;
+
+    public DiscardItem(DiscardItemButton discardItemButton)
+    {
+        discardItemButton.DropItem += DropItem;
+        discardItemButton.SetDroppingItem += GetItem;
+    }
 
     public void GetItem(GameObject item)
     {
-        Debug.Log("DiscardItem / GetItem");
         _currentItem = item;
     }
 
@@ -17,7 +22,6 @@ public class DiscardItem
         if (_currentItem == null)
             return;
 
-        Debug.Log("DiscardItem / DropItem");
         Rigidbody rbItem = _currentItem.GetComponent<Rigidbody>();
         MeshCollider colliderItem = _currentItem.GetComponent<MeshCollider>();
 

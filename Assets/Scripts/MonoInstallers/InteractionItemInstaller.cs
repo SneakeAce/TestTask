@@ -2,6 +2,8 @@ using Zenject;
 
 public class InteractionItemInstaller : MonoInstaller
 {
+    private OpenDoorController _openDoorController; 
+
     public override void InstallBindings()
     {
         BindTakingItem();

@@ -6,12 +6,11 @@ using Zenject;
 
 public class CameraController : MonoBehaviour
 {
-    private const float MinValueForOffsetCamera = 0.01f;
-    private const float MinValueCoordinate = 0f;
-
     [SerializeField] private List<RectTransform> _touchAreas;
 
     private PlayerController _player;
+    private GameObject _playerHead;
+
     private PlayerInput _playerInput;
 
     private CinemachineVirtualCamera _virtualCamera;
@@ -21,6 +20,13 @@ public class CameraController : MonoBehaviour
     private Vector2 _lookInput;
 
     private float _sensitivityCamera;
+
+    private string _playerHeadName = "Head";
+
+    private bool _isPickItemEnabled;
+
+    private const float MinValueForOffsetCamera = 0.01f;
+    private const float MinValueCoordinate = 0f;
 
     [Inject]
     public void Constuct(PlayerController player, PlayerInput playerInput, 
@@ -39,7 +45,7 @@ public class CameraController : MonoBehaviour
     {
         _povCamera = _virtualCamera.GetCinemachineComponent<CinemachinePOV>();
 
-        _virtualCamera.Follow = _player.transform;
+        _virtualCamera.Follow = _player.GetComponentInChildren<Transform>().Find(_playerHeadName);
         _virtualCamera.LookAt = null;
     }
 
@@ -51,13 +57,28 @@ public class CameraController : MonoBehaviour
             return;
 
         if (_lookInput.sqrMagnitude < MinValueForOffsetCamera)
+        {
+            if (_isPickItemEnabled == false)
+            {
+                _playerInput.TakingItem.PickItem.Enable();
+                _isPickItemEnabled = true;
+            }
+
             return;
+        }
+
+        if (_isPickItemEnabled)
+        {
+            _playerInput.TakingItem.PickItem.Disable();
+            _isPickItemEnabled = false;
+        }
+
+        _playerInput.TakingItem.PickItem.Disable();
 
         _povCamera.m_HorizontalAxis.Value += _lookInput.x * _sensitivityCamera;
-
         _povCamera.m_VerticalAxis.Value -= _lookInput.y * _sensitivityCamera;
 
-        _player.transform.rotation = Quaternion.Euler(MinValueCoordinate, _povCamera.m_HorizontalAxis.Value, MinValueCoordinate);
+        _player.transform.rotation = Quaternion.Euler(_povCamera.m_VerticalAxis.Value, _povCamera.m_HorizontalAxis.Value, MinValueCoordinate);
     }
 
     private bool IsTouchInArea()
