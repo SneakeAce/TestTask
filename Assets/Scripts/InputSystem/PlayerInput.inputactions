@@ -1,0 +1,90 @@
+{
+    "name": "PlayerInput",
+    "maps": [
+        {
+            "name": "PlayerMoving",
+            "id": "922d74bd-325f-41e6-b45a-a53169dbcc77",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "cc3703d8-d281-473e-af55-9aa549390898",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "41b30195-ae37-412d-ae10-f73286fbcac6",
+                    "path": "<Joystick>/stick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "PlayerLooking",
+            "id": "e58eda2f-6154-41ad-b980-9d9fa93c3c0a",
+            "actions": [
+                {
+                    "name": "LookAround",
+                    "type": "Value",
+                    "id": "3b574b0b-6778-4b2e-9940-10a490552a10",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "209aca2e-c7f6-4419-b225-cffdd80585e4",
+                    "path": "<Touchscreen>/delta",
+                    "interactions": "Hold(duration=0.2,pressPoint=0.2)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LookAround",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "TakingItem",
+            "id": "1277ca4b-82ce-4878-9666-eb4b26ebc654",
+            "actions": [
+                {
+                    "name": "PickItem",
+                    "type": "Value",
+                    "id": "078ab392-3860-46c5-a142-8fbf7cf9ce06",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6eec83de-41ef-461e-b219-7a8644cc2e15",
+                    "path": "<Touchscreen>/primaryTouch/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PickItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
